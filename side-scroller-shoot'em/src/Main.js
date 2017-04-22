@@ -7,6 +7,8 @@ function Main() {
     this.stage.addChild(this.player);
 
     this.bulletController = new BulletController();
+    this.enemyController = new EnemyController();
+    this.timer = setInterval(this.addEnemy.bind(this), 2000);
 
     this.stage.interactive = true;
 
@@ -30,6 +32,7 @@ Main.prototype.update = function () {
     );
 
     this.bulletController.moveBullets();
+    this.enemyController.moveEnemies();
 
     this.renderer.render(this.stage);
     requestAnimationFrame(this.update.bind(this));
@@ -37,7 +40,12 @@ Main.prototype.update = function () {
 
 Main.prototype.shoot = function (rotation, startPosition) {
     var bullet = new Bullet(rotation, startPosition);
-    this.stage.addChild(bullet);
     this.bulletController.add(bullet);
-    console.log(this.bulletController.getPositions());
+    this.stage.addChild(bullet);
+}
+
+Main.prototype.addEnemy = function () {
+    var enemy = new Enemy();
+    this.enemyController.add(enemy);
+    this.stage.addChild(enemy);
 }

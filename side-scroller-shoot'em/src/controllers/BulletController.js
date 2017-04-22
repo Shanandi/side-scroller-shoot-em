@@ -1,4 +1,3 @@
-const SPEED = 5;
 function BulletController() {
     this.bullets = [];
 }
