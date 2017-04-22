@@ -43,8 +43,8 @@ Main.prototype.update = function () {
     var newViewportX = this.scroller.getViewportX() + SPEED;
     this.scroller.setViewportX(newViewportX);
 
-    this.bulletController.moveBullets();
-    this.enemyController.moveEnemies();
+    this.bulletController.moveSprites();
+    this.enemyController.moveSprites();
 
     this.renderer.render(this.stage);
     requestAnimationFrame(this.update.bind(this));
