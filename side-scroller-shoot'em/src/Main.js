@@ -19,7 +19,22 @@ function Main() {
             x: this.player.position.x + Math.cos(this.player.rotation) * 60,
             y: this.player.position.y + Math.sin(this.player.rotation) * 60
         });
-    }.bind(this))
+    }.bind(this));
+
+    this.stage.on("mousemove", function (e) {
+        this.player.move(
+            this.renderer.plugins.interaction.mouse.global.x,
+            this.renderer.plugins.interaction.mouse.global.y
+        );
+    }.bind(this));
+
+    // TODO: find a way to allow player rotation
+    // this.stage.on("rightclick", function (e) {
+    //     this.player.rotate(
+    //         this.renderer.plugins.interaction.mouse.global.x,
+    //         this.renderer.plugins.interaction.mouse.global.y
+    //     );
+    // }.bind(this))
 
     requestAnimationFrame(this.update.bind(this));
 };
@@ -27,11 +42,6 @@ function Main() {
 Main.prototype.update = function () {
     var newViewportX = this.scroller.getViewportX() + SPEED;
     this.scroller.setViewportX(newViewportX);
-
-    this.player.rotate(
-        this.renderer.plugins.interaction.mouse.global.x,
-        this.renderer.plugins.interaction.mouse.global.y
-    );
 
     this.bulletController.moveBullets();
     this.enemyController.moveEnemies();
@@ -44,10 +54,10 @@ Main.prototype.shoot = function (rotation, startPosition) {
     var bullet = new Bullet(rotation, startPosition);
     this.bulletController.add(bullet);
     this.stage.addChild(bullet);
-}
+};
 
 Main.prototype.addEnemy = function () {
     var enemy = new Enemy();
     this.enemyController.add(enemy);
     this.stage.addChild(enemy);
-}
+};

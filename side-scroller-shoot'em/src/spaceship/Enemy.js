@@ -6,7 +6,7 @@ function Enemy() {
     this.anchor.y = 0.5;
     this.moveCounter = 0;
     this.rotation = Math.PI;
-}
+};
 Enemy.prototype = Object.create(SpaceShip.prototype);
 
 Enemy.prototype.getRotation = function () {
@@ -14,4 +14,4 @@ Enemy.prototype.getRotation = function () {
         var rand = Math.floor(Math.random() * 4);
         console.log(rand);
     }
-}
+};

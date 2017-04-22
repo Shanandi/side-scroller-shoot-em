@@ -5,7 +5,7 @@ function Scroller(stage) {
     stage.addChild(this.mid);
 
     this.viewportX = 0;
-}
+};
 
 Scroller.prototype.setViewportX = function (viewportX) {
     this.viewportX = viewportX;

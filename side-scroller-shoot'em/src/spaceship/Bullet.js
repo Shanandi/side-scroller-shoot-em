@@ -6,5 +6,5 @@ function Bullet(rotation, position) {
     this.rotation = rotation;
     this.anchor.x = 0.5;
     this.anchor.y = 0.5;
-}
+};
 Bullet.prototype = Object.create(PIXI.Sprite.prototype);

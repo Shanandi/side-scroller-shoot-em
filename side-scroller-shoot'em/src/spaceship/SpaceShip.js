@@ -1,7 +1,7 @@
 function SpaceShip(url) {
     let texture = PIXI.Texture.fromImage('../resources/' + url + '.png');
     PIXI.Sprite.call(this, texture);
-}
+};
 SpaceShip.prototype = Object.create(PIXI.Sprite.prototype);
 
 SpaceShip.prototype.rotate = function (anchorPositionX, anchorPositionY) {
