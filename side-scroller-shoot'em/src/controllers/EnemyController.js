@@ -1,5 +1,3 @@
-const SPEED = 5;
-
 function EnemyController() {
     this.enemies = [];
 }

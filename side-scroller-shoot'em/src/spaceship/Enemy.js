@@ -1,7 +1,7 @@
 function Enemy() {
     SpaceShip.call(this, 'enemy');
-    this.position.x = 850;
-    this.position.y = Math.floor(Math.random() * 600);
+    this.position.x = CANVAS_X + 50;
+    this.position.y = Math.floor(Math.random() * CANVAS_Y);
     this.anchor.x = 0.5;
     this.anchor.y = 0.5;
     this.moveCounter = 0;
