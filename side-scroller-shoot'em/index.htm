@@ -1,0 +1,25 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Side Scroller Shoot'em</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js"></script>
+	<script src="src/background/Background.js"></script>
+	<script src="src/background/FarBackground.js"></script>
+	<script src="src/background/MidBackground.js"></script>
+	<script src="src/Main.js"></script>
+	<script>
+		let init = () => {
+			new Main();
+		}
+	</script>
+</head>
+
+<body onload="init()">
+	<div class="game-div">
+		<canvas id="game-canvas" width="800" height="600" class="game-canvas"></canvas>
+	</div>
+</body>
+
+</html>
