@@ -20,5 +20,7 @@ Main.prototype.update = function () {
 
     if (!this.controller.gameOver) {
         requestAnimationFrame(this.update.bind(this));
+    } else {
+        // TODO: game over screen
     }
 };
