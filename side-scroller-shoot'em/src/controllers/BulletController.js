@@ -1,5 +1,5 @@
-function BulletController() {
-    this.collection = [];
-    Controller.call();
-};
-BulletController.prototype = Object.create(Controller.prototype);
+class BulletController extends Controller {
+    constructor() {
+        super();
+    }
+}
