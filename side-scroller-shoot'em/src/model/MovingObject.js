@@ -13,3 +13,7 @@ MovingObject.prototype.move = function (x, y) {
 };
 
 MovingObject.prototype.rotate = function () { };
+
+MovingObject.prototype.explode = function () {
+    console.log('EXPLOSION');
+};

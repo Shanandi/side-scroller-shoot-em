@@ -31,9 +31,18 @@ Collection.prototype.isWithinCanvas = function (x, y) {
 };
 
 Collection.prototype.remove = function (index) {
-    let sprite = this.collection[index];
+    this.collection[index].destroy();
     this.collection.splice(index, 1);
-    sprite.destroy();
+};
+
+Collection.prototype.getItems = function (callback, context) {
+    return this.collection;
+};
+
+Collection.prototype.explode = function (index) {
+    // let timer = setTimeout() TODO: timeout?
+    this.collection[index].explode();
+    this.remove(index);
 };
 
 // Bullet collection
