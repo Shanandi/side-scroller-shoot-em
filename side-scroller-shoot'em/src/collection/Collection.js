@@ -35,8 +35,12 @@ Collection.prototype.remove = function (index) {
     this.collection.splice(index, 1);
 };
 
-Collection.prototype.getItems = function (callback, context) {
+Collection.prototype.getItems = function () {
     return this.collection;
+};
+
+Collection.prototype.getModelAt = function (index) {
+    return this.collection[index];
 };
 
 // Bullet collection

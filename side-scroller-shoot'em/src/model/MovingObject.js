@@ -2,6 +2,7 @@ function MovingObject(url) {
     let texture = PIXI.Texture.fromImage('../resources/' + url + '.png');
     PIXI.Sprite.call(this, texture);
     this.moveCounter = 0;
+    this.calculateBounds();
 };
 MovingObject.prototype = Object.create(PIXI.Sprite.prototype);
 
@@ -14,6 +15,10 @@ MovingObject.prototype.move = function (x, y) {
 
 MovingObject.prototype.rotate = function () { };
 
-MovingObject.prototype.explode = function () {
-    console.log('EXPLOSION');
-};
+MovingObject.prototype.propagateExplosion = function (stage) {
+    let particleCollection = new ParticleCollection({
+        x: this.position.x,
+        y: this.position.y
+    });
+    stage.addChild(particleCollection);
+}
