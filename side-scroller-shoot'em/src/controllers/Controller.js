@@ -1,37 +1,30 @@
 const OFFSET = 100;
-class Controller {
-    constructor() {
-        this.collection = [];
-    }
+function Controller() {
+    this.collection = [];
+};
 
-    add(sprite) {
-        this.collection.push(sprite);
-    }
+Controller.prototype.add = function (sprite) {
+    this.collection.push(sprite);
+};
 
-    moveSprites() {
-        var index = 0;
-        while (index < this.collection.length) {
-            let sprite = this.collection[index];
-            if (this.isWithinCanvas(sprite)) {
-                sprite.rotate();
-                sprite.position.x += Math.cos(sprite.rotation) * SPEED;
-                sprite.position.y += Math.sin(sprite.rotation) * SPEED;
-                sprite.moveCounter += 1;
-                ++index;
-            } else {
-                this.removeSprite(index);
-            }
+Controller.prototype.moveSprites = function () {
+    var index = 0;
+    while (index < this.collection.length) {
+        let sprite = this.collection[index],
+            x = sprite.position.x += Math.cos(sprite.rotation) * SPEED,
+            y = sprite.position.y += Math.sin(sprite.rotation) * SPEED;
+        if (this.isWithinCanvas(x, y)) {
+            sprite.position.x = x;
+            sprite.position.y = y;
+            ++index;
+        } else {
+            this.collection.splice(index, 1);
+            sprite.destroy();
         }
     }
+    console.log(this.collection.length);
+};
 
-    isWithinCanvas(sprite) {
-        let x = sprite.position.x, y = sprite.position.y;
-        return x > -OFFSET && x < CANVAS_X + OFFSET && y > -OFFSET && y < CANVAS_Y + OFFSET;
-    }
-
-    removeSprite(index) {
-        let sprite = this.collection[index];
-        this.collection.splice(index, 1);
-        sprite.destroy();
-    }
+Controller.prototype.isWithinCanvas = function (x, y) {
+    return x > -OFFSET && x < CANVAS_X + OFFSET && y > -OFFSET && y < CANVAS_Y + OFFSET;
 }
