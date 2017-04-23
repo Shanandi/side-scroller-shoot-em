@@ -39,12 +39,6 @@ Collection.prototype.getItems = function (callback, context) {
     return this.collection;
 };
 
-Collection.prototype.explode = function (index) {
-    // let timer = setTimeout() TODO: timeout?
-    this.collection[index].explode();
-    this.remove(index);
-};
-
 // Bullet collection
 function BulletCollection(stage) {
     Collection.call(this, stage);

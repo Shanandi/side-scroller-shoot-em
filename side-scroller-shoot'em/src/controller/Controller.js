@@ -33,15 +33,23 @@ Controller.prototype.checkCollision = function () {
         let bIndex = 0;
         while (bIndex < bullets.length) {
             if (this.checkPosition(bullets[bIndex], enemies[eIndex])) {
-                this.enemyCollection.explode(eIndex);
-                this.bulletCollection.explode(bIndex);
+                this.propagateExplosion([
+                    enemies[eIndex].position,
+                    bullets[bIndex].position
+                ]);
+                this.enemyCollection.remove(eIndex);
+                this.bulletCollection.remove(bIndex);
                 break;
             } else {
                 ++bIndex;
             }
         }
         if (enemies[eIndex] && this.checkPosition(this.player, enemies[eIndex])) {
-            //this.gameOver = true;
+            this.propagateExplosion([
+                enemies[eIndex].position,
+                this.player.position
+            ]);
+            this.gameOver = true;
             break;
         }
         ++eIndex;
@@ -65,4 +73,11 @@ Controller.prototype.checkPosition = function (spriteA, spriteB) {
         return true;
     }
     return false;
+};
+
+Controller.prototype.propagateExplosion = function (positions) {
+    positions.forEach(function (position) {
+        let particleCollection = new ParticleCollection(position);
+        this.stage.addChild(particleCollection);
+    }, this);
 };
