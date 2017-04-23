@@ -8,56 +8,37 @@ function Main() {
     this.player = new Player();
     this.stage.addChild(this.player);
 
-    this.bulletController = new BulletController();
-    this.enemyController = new EnemyController();
-    this.timer = setInterval(this.addEnemy.bind(this), 2000);
+    this.bulletCollection = new BulletCollection(this.stage);
+    this.enemyCollection = new EnemyCollection(this.stage);
+
+    this.timer = setInterval(this.enemyCollection.add.bind(this.enemyCollection), 2000);
 
     this.stage.interactive = true;
 
-    this.stage.on("mousedown", function (e) {
-        this.shoot(this.player.rotation, {
+    this.stage.on('mousedown', function (e) {
+        let position = {
             x: this.player.position.x + Math.cos(this.player.rotation) * 60,
             y: this.player.position.y + Math.sin(this.player.rotation) * 60
-        });
+        };
+        this.bulletCollection.add(this.player.rotation, position);
     }.bind(this));
 
-    this.stage.on("mousemove", function (e) {
+    this.stage.on('mousemove', function (e) {
         this.player.move(
             this.renderer.plugins.interaction.mouse.global.x,
             this.renderer.plugins.interaction.mouse.global.y
         );
     }.bind(this));
 
-    // TODO: find a way to allow player rotation
-    // this.stage.on("rightclick", function (e) {
-    //     this.player.rotate(
-    //         this.renderer.plugins.interaction.mouse.global.x,
-    //         this.renderer.plugins.interaction.mouse.global.y
-    //     );
-    // }.bind(this))
-
     requestAnimationFrame(this.update.bind(this));
 };
 
 Main.prototype.update = function () {
-    var newViewportX = this.scroller.getViewportX() + SPEED;
-    this.scroller.setViewportX(newViewportX);
+    this.scroller.setViewportX();
 
-    this.bulletController.moveSprites();
-    this.enemyController.moveSprites();
+    this.bulletCollection.moveSprites();
+    this.enemyCollection.moveSprites();
 
     this.renderer.render(this.stage);
     requestAnimationFrame(this.update.bind(this));
-};
-
-Main.prototype.shoot = function (rotation, startPosition) {
-    var bullet = new Bullet(rotation, startPosition);
-    this.bulletController.add(bullet);
-    this.stage.addChild(bullet);
-};
-
-Main.prototype.addEnemy = function () {
-    var enemy = new Enemy();
-    this.enemyController.add(enemy);
-    this.stage.addChild(enemy);
 };
