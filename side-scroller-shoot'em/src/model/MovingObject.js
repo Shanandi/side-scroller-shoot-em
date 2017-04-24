@@ -1,5 +1,5 @@
 function MovingObject(url) {
-    let texture = PIXI.Texture.fromImage('../resources/' + url + '.png');
+    let texture = PIXI.Texture.fromImage('../resources/images/' + url + '.png');
     PIXI.Sprite.call(this, texture);
     this.moveCounter = 0;
 };

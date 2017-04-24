@@ -22,7 +22,7 @@ ParticleCollection.prototype.setParticles = function () {
         var angle = Math.random() * Math.PI * 2;
         var radius = Math.random() * 20 * 2;
 
-        let sprite = PIXI.Sprite.fromImage('../../resources/explosion.png');
+        let sprite = PIXI.Sprite.fromImage('../../resources/images/explosion.png');
         sprite.anchor.set(0.5);
         sprite.position.x += radius * Math.cos(angle);
         sprite.position.y += radius * Math.sin(angle);

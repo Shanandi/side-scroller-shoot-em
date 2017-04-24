@@ -1,8 +1,7 @@
 function Scroller(stage) {
+    this.stage = stage;
     this.far = new FarBackground();
-    this.mid = new MidBackground();
-    stage.addChild(this.far);
-    stage.addChild(this.mid);
+    this.stage.addChild(this.far);
 
     this.viewportX = 0;
 };
@@ -10,9 +9,12 @@ function Scroller(stage) {
 Scroller.prototype.setViewportX = function () {
     this.viewportX += SPEED;
     this.far.setViewportX(this.viewportX);
-    this.mid.setViewportX(this.viewportX);
+    if (this.mid) {
+        this.mid.setViewportX(this.viewportX);
+    }
 };
 
-Scroller.prototype.getViewportX = function () {
-    return this.viewportX;
+Scroller.prototype.addMidBackground = function () {
+    this.mid = new MidBackground();
+    this.stage.addChild(this.mid);
 };
