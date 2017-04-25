@@ -1,13 +1,27 @@
-function MenuController(stage, statusText) {
+function MenuController(stage) {
     Controller.call(this, stage);
     this.selectedOption = 'game1';
-    let background = new PIXI.Sprite.fromImage('../../resources/images/far.png');
-    this.stage.addChild(background);
+    this.stopped = false;
+    this.background = new FarBackground();
+    this.stage.addChild(this.background);
 
-    let text = new DecoratedText(statusText);
-    text.position.set(CANVAS_X - 200, 100);
-    this.stage.addChild(text);
+    let title = new DecoratedText('Amazing Space Shooter');
+    title.position.set(CANVAS_X / 2, 50);
+    this.stage.addChild(title);
 
+    let logo = new Player();
+    logo.position.set(CANVAS_X / 2, 200);
+    this.stage.addChild(logo);
+
+    this.timer = setInterval(function () {
+        logo.rotation += Math.PI / 12;
+    }.bind(this), 100);
+
+    this.addButtons();
+};
+MenuController.prototype = Object.create(Controller.prototype);
+
+MenuController.prototype.addButtons = function () {
     let gameButtons = [];
     for (let i = 1; i <= 3; ++i) {
         let button = new Button('GAME', i);
@@ -19,8 +33,15 @@ function MenuController(stage, statusText) {
         this.stage.addChild(button);
         button.on('click', function () {
             this.selectedOption = button.text.toLowerCase();
+            clearInterval(this.timer);
+            this.stopped = true;
             this.over();
         }.bind(this));
     }.bind(this));
 };
-MenuController.prototype = Object.create(Controller.prototype);
+
+MenuController.prototype.update = function () {
+    if (!this.stopped) {
+        this.background.setViewportX();
+    }
+};

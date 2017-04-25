@@ -9,7 +9,6 @@ function BackgroundCollection(stage) {
 };
 
 BackgroundCollection.prototype.setViewportX = function () {
-    this.viewportX += SPEED;
-    this.far.setViewportX(this.viewportX);
-    this.mid.setViewportX(this.viewportX);
+    this.far.setViewportX();
+    this.mid.setViewportX();
 };

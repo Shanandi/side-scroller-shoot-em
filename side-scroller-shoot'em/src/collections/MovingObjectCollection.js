@@ -43,14 +43,20 @@ Collection.prototype.getModelAt = function (index) {
     return this.collection[index];
 };
 
+Collection.prototype.clear = function () {
+    while (this.collection.length > 0) {
+        this.remove(0);
+    }
+};
+
 // Bullet collection
 function BulletCollection(stage) {
     Collection.call(this, stage);
 };
 BulletCollection.prototype = Object.create(Collection.prototype);
 
-BulletCollection.prototype.add = function (rotation, position) {
-    let sprite = new Bullet(rotation, position);
+BulletCollection.prototype.add = function (position) {
+    let sprite = new Bullet(position);
     Collection.prototype.add.call(this, sprite);
 };
 

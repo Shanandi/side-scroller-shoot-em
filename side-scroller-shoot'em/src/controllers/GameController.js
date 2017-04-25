@@ -1,4 +1,7 @@
 const TOLERANCE = 30;
+const SHORT_EXPLOSION = 600;
+const LONG_EXPLOSION = 2500;
+
 function GameController(stage, renderer) {
     Controller.call(this, stage);
     this.stage.interactive = true;
@@ -19,7 +22,7 @@ function GameController(stage, renderer) {
             x: this.player.position.x + Math.cos(this.player.rotation) * 60,
             y: this.player.position.y + Math.sin(this.player.rotation) * 60
         };
-        this.bulletCollection.add(this.player.rotation, position);
+        this.bulletCollection.add(position);
     }.bind(this);
 
     this.stage.mousemove = function () {
@@ -42,7 +45,7 @@ GameController.prototype.checkCollision = function () {
         while (bIndex < bullets.length) {
             var bullet = this.bulletCollection.getModelAt(bIndex);
             if (this.checkPosition(bullet, enemy)) {
-                enemy.propagateExplosion(this.stage);
+                enemy.propagateExplosion(this.stage, SHORT_EXPLOSION);
                 this.enemyCollection.remove(eIndex);
                 this.bulletCollection.remove(bIndex);
                 break;
@@ -85,10 +88,16 @@ GameController.prototype.beforeOver = function (enemy) {
     this.stopped = true;
     this.stage.mousemove = null;
     this.stage.mousedown = null;
-    enemy.propagateExplosion(this.stage);
-    this.player.propagateExplosion(this.stage);
+
+    enemy.propagateExplosion(this.stage, LONG_EXPLOSION);
+    this.player.propagateExplosion(this.stage, LONG_EXPLOSION);
+
     let text = new DecoratedText('Game Over');
     text.position.set(CANVAS_X / 2, CANVAS_Y / 2);
     this.stage.addChild(text);
-    setTimeout(this.over.bind(this), 400);
+
+    this.enemyCollection.clear();
+    this.bulletCollection.clear();
+    this.player.destroy();
+    setTimeout(this.over.bind(this), 2000);
 };

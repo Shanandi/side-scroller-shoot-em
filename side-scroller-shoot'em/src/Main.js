@@ -17,7 +17,9 @@ Main.prototype.update = function () {
         this.controller = this.getNextController(this.controller.getSelectedOption());
     }
 
-    requestAnimationFrame(this.update.bind(this));
+    if (this.controller) {
+        requestAnimationFrame(this.update.bind(this));
+    }
 };
 
 Main.prototype.getNextController = function (selectedOption) {
@@ -25,13 +27,13 @@ Main.prototype.getNextController = function (selectedOption) {
         case 'init':
             return new SplashController(this.stage);
         case 'new_game':
-            return new MenuController(this.stage, 'New\nGame');
+            return new MenuController(this.stage);
         case 'game1':
         case 'game2':
         case 'game3':
             return new GameController(this.stage, this.renderer);
         case 'exit':
-            console.log('EXITING');
+            window.top.close();
             return;
     }
 };

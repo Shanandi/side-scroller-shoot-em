@@ -1,6 +1,6 @@
 const COUNT = 2000;
 
-function ParticleCollection(position) {
+function ParticleCollection(position, time) {
     PIXI.particles.ParticleContainer.call(this, COUNT, {
         scale: true,
         position: true,
@@ -13,7 +13,7 @@ function ParticleCollection(position) {
     this.particles = [];
 
     this.setParticles();
-    setTimeout(this.clear.bind(this), 600);
+    setTimeout(this.clear.bind(this), time);
 };
 ParticleCollection.prototype = Object.create(PIXI.particles.ParticleContainer.prototype);
 
