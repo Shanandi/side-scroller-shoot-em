@@ -1,6 +1,8 @@
 const TOLERANCE = 30;
-function Controller(stage, renderer) {
-    this.stage = stage;
+function GameController(stage, renderer) {
+    Controller.call(this, stage);
+    this.selectedOption = 'game_over';
+    this.backgroundCollection = new BackgroundCollection(this.stage);
     this.bulletCollection = new BulletCollection(this.stage);
     this.enemyCollection = new EnemyCollection(this.stage);
     this.player = new Player();
@@ -23,8 +25,9 @@ function Controller(stage, renderer) {
         );
     }.bind(this));
 };
+GameController.prototype = Object.create(Controller.prototype);
 
-Controller.prototype.checkCollision = function () {
+GameController.prototype.checkCollision = function () {
     let enemies = this.enemyCollection.getItems(),
         bullets = this.bulletCollection.getItems(),
         eIndex = 0;
@@ -47,20 +50,21 @@ Controller.prototype.checkCollision = function () {
         if (enemy && this.checkPosition(this.player, enemy)) {
             enemy.propagateExplosion(this.stage);
             this.player.propagateExplosion(this.stage);
-            this.gameOver = true;
+            this.over();
             break;
         }
         ++eIndex;
     }
 };
 
-Controller.prototype.update = function () {
+GameController.prototype.update = function () {
+    this.backgroundCollection.setViewportX();
     this.bulletCollection.moveSprites();
     this.enemyCollection.moveSprites();
     this.checkCollision();
 };
 
-Controller.prototype.checkPosition = function (spriteA, spriteB) {
+GameController.prototype.checkPosition = function (spriteA, spriteB) {
     let rectA = spriteA.getBounds(),
         rectB = spriteB.getBounds(),
         x1 = rectA.x, x2 = rectB.x,

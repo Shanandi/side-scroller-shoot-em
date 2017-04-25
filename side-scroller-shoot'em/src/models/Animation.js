@@ -9,5 +9,7 @@ function Animation() {
     this.anchor.set(0.5);
     this.scale.set(0.4);
     this.position.set(CANVAS_X / 2, CANVAS_Y / 2.5);
+    this.animationSpeed = 0.15;
+    this.play();
 };
 Animation.prototype = Object.create(PIXI.extras.AnimatedSprite.prototype);
