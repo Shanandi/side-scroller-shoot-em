@@ -11,9 +11,7 @@ function DecoratedText(text) {
         dropShadowColor: '#181818',
         dropShadowBlur: 4,
         dropShadowAngle: Math.PI / 6,
-        dropShadowDistance: 6,
-        wordWrap: true,
-        wordWrapWidth: 440
+        dropShadowDistance: 6
     });
     PIXI.Text.call(this, text, style);
     this.anchor.set(0.5);

@@ -7,8 +7,7 @@ MovingObject.prototype = Object.create(PIXI.Sprite.prototype);
 
 MovingObject.prototype.move = function (x, y) {
     this.rotate();
-    this.position.x = x;
-    this.position.y = y;
+    this.position.set(x, y);
     ++this.moveCounter;
 };
 

@@ -5,10 +5,6 @@ function Background(url = '', width = 800, height = 600) {
 };
 Background.prototype = Object.create(PIXI.extras.TilingSprite.prototype);
 
-Background.prototype.update = function () {
-    this.tilePosition.x -= this.offset;
-};
-
 Background.prototype.setViewportX = function (newViewportX) {
     var distanceTravelled = newViewportX - this.viewportX;
     this.viewportX = newViewportX;

@@ -1,7 +1,11 @@
 const TOLERANCE = 30;
 function GameController(stage, renderer) {
     Controller.call(this, stage);
-    this.selectedOption = 'game_over';
+    this.stage.interactive = true;
+    this.cursor = 'none';
+    this.selectedOption = 'new_game';
+    this.stopped = false;
+
     this.backgroundCollection = new BackgroundCollection(this.stage);
     this.bulletCollection = new BulletCollection(this.stage);
     this.enemyCollection = new EnemyCollection(this.stage);
@@ -10,20 +14,20 @@ function GameController(stage, renderer) {
 
     this.timer = setInterval(this.enemyCollection.add.bind(this.enemyCollection), 2000);
 
-    this.stage.on('mousedown', function (e) {
+    this.stage.mousedown = function () {
         let position = {
             x: this.player.position.x + Math.cos(this.player.rotation) * 60,
             y: this.player.position.y + Math.sin(this.player.rotation) * 60
         };
         this.bulletCollection.add(this.player.rotation, position);
-    }.bind(this));
+    }.bind(this);
 
-    this.stage.on('mousemove', function (e) {
+    this.stage.mousemove = function () {
         this.player.move(
             renderer.plugins.interaction.mouse.global.x,
             renderer.plugins.interaction.mouse.global.y
         );
-    }.bind(this));
+    }.bind(this);
 };
 GameController.prototype = Object.create(Controller.prototype);
 
@@ -48,9 +52,7 @@ GameController.prototype.checkCollision = function () {
         }
         enemy = this.enemyCollection.getModelAt(eIndex);
         if (enemy && this.checkPosition(this.player, enemy)) {
-            enemy.propagateExplosion(this.stage);
-            this.player.propagateExplosion(this.stage);
-            this.over();
+            this.beforeOver(enemy);
             break;
         }
         ++eIndex;
@@ -58,10 +60,12 @@ GameController.prototype.checkCollision = function () {
 };
 
 GameController.prototype.update = function () {
-    this.backgroundCollection.setViewportX();
-    this.bulletCollection.moveSprites();
-    this.enemyCollection.moveSprites();
-    this.checkCollision();
+    if (!this.stopped) {
+        this.backgroundCollection.setViewportX();
+        this.bulletCollection.moveSprites();
+        this.enemyCollection.moveSprites();
+        this.checkCollision();
+    }
 };
 
 GameController.prototype.checkPosition = function (spriteA, spriteB) {
@@ -75,4 +79,16 @@ GameController.prototype.checkPosition = function (spriteA, spriteB) {
         return true;
     }
     return false;
+};
+
+GameController.prototype.beforeOver = function (enemy) {
+    this.stopped = true;
+    this.stage.mousemove = null;
+    this.stage.mousedown = null;
+    enemy.propagateExplosion(this.stage);
+    this.player.propagateExplosion(this.stage);
+    let text = new DecoratedText('Game Over');
+    text.position.set(CANVAS_X / 2, CANVAS_Y / 2);
+    this.stage.addChild(text);
+    setTimeout(this.over.bind(this), 400);
 };

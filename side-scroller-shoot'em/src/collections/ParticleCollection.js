@@ -13,7 +13,7 @@ function ParticleCollection(position) {
     this.particles = [];
 
     this.setParticles();
-    setTimeout(this.clear.bind(this), 400);
+    setTimeout(this.clear.bind(this), 600);
 };
 ParticleCollection.prototype = Object.create(PIXI.particles.ParticleContainer.prototype);
 
