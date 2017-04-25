@@ -1,6 +1,6 @@
 function SplashController(stage) {
     Controller.call(this, stage);
-    this.selectedOption = 'new_game';
+    this.selectedOption = 'menu';
     let background = new PIXI.Sprite.fromImage('../../resources/images/far.png');
     this.stage.addChild(background);
 

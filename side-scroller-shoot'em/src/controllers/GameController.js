@@ -6,7 +6,7 @@ function GameController(stage, renderer) {
     Controller.call(this, stage);
     this.stage.interactive = true;
     this.cursor = 'none';
-    this.selectedOption = 'new_game';
+    this.selectedOption = 'menu';
     this.stopped = false;
 
     this.backgroundCollection = new BackgroundCollection(this.stage);
@@ -17,7 +17,7 @@ function GameController(stage, renderer) {
 
     this.timer = setInterval(this.enemyCollection.add.bind(this.enemyCollection), 2000);
 
-    this.stage.mousedown = function () {
+    this.stage.pointertap = function () {
         let position = {
             x: this.player.position.x + Math.cos(this.player.rotation) * 60,
             y: this.player.position.y + Math.sin(this.player.rotation) * 60
@@ -25,7 +25,7 @@ function GameController(stage, renderer) {
         this.bulletCollection.add(position);
     }.bind(this);
 
-    this.stage.mousemove = function () {
+    this.stage.pointermove = function () {
         this.player.move(
             renderer.plugins.interaction.mouse.global.x,
             renderer.plugins.interaction.mouse.global.y
@@ -86,8 +86,8 @@ GameController.prototype.checkPosition = function (spriteA, spriteB) {
 
 GameController.prototype.beforeOver = function (enemy) {
     this.stopped = true;
-    this.stage.mousemove = null;
-    this.stage.mousedown = null;
+    this.stage.pointermove = null;
+    this.stage.pointermove = null;
 
     enemy.propagateExplosion(this.stage, LONG_EXPLOSION);
     this.player.propagateExplosion(this.stage, LONG_EXPLOSION);

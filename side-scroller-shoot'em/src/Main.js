@@ -1,24 +1,22 @@
 function Main() {
-    let canvas = document.getElementById('game-canvas');
-    canvas.width = CANVAS_X;
-    canvas.height = CANVAS_Y;
-    this.stage = new PIXI.Container();
-    this.renderer = PIXI.autoDetectRenderer(CANVAS_X, CANVAS_Y, { view: canvas });
+    PIXI.Application.call(this);
+    document.body.appendChild(this.view);
+
     this.controller = this.getNextController('init');
 
-    requestAnimationFrame(this.update.bind(this));
+    this.ticker.add(this.update.bind(this));
 };
+Main.prototype = Object.create(PIXI.Application.prototype);
 
-Main.prototype.update = function () {
+Main.prototype.update = function (delta) {
     this.controller.update();
-    this.renderer.render(this.stage);
 
     if (this.controller.isOver) {
         this.controller = this.getNextController(this.controller.getSelectedOption());
     }
 
-    if (this.controller) {
-        requestAnimationFrame(this.update.bind(this));
+    if (!this.controller) {
+        this.ticker.stop();
     }
 };
 
@@ -26,7 +24,7 @@ Main.prototype.getNextController = function (selectedOption) {
     switch (selectedOption) {
         case 'init':
             return new SplashController(this.stage);
-        case 'new_game':
+        case 'menu':
             return new MenuController(this.stage);
         case 'game1':
         case 'game2':
