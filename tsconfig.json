@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "sourceMap": true,
+        "outFile": "side-scroller-shoot'em/build/all.js"
+    }
+}
