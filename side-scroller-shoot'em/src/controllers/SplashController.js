@@ -1,8 +1,9 @@
 function SplashController(stage) {
     Controller.call(this, stage);
     this.selectedOption = 'menu';
-    let background = new PIXI.Sprite.fromImage('../../resources/images/far.png');
-    this.stage.addChild(background);
+    this.stopped = true;
+    this.background = new PIXI.Sprite.fromImage('../../resources/images/far.png');
+    this.stage.addChild(this.background);
 
     let animation = new Animation();
     this.stage.addChild(animation);
@@ -14,7 +15,22 @@ function SplashController(stage) {
     }.bind(this);
 
     setTimeout(function () {
-        this.over();
+        this.filter = new PIXI.filters.ColorMatrixFilter();
+        this.stage.filters = [this.filter];
+        this.stage.removeChild(animation);
+        this.stopped = false;
     }.bind(this), 2000);
+
+    setTimeout(function () {
+        this.over();
+    }.bind(this), 3000);
 };
 SplashController.prototype = Object.create(Controller.prototype);
+
+SplashController.prototype.update = function () {
+    if (!this.stopped) {
+        this.filter.matrix[3] -= 0.15;
+        this.filter.matrix[7] -= 0.15;
+        this.filter.matrix[11] -= 0.15;
+    }
+};

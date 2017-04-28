@@ -21,6 +21,7 @@ Main.prototype.update = function (delta) {
 };
 
 Main.prototype.getNextController = function (selectedOption) {
+    this.stage.filters = [];
     switch (selectedOption) {
         case 'init':
             return new SplashController(this.stage);
