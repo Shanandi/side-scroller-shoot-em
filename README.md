@@ -3,10 +3,10 @@ Development of a browser based application with HTML, CSS and vanilla JavaScript
 
 The game is composed of the following screens:
 
-##1: Splash screen
+#1: Splash screen
 Bitmap, shown for 2 seconds, then fades out
 
-##2: Main screen
+#2: Main screen
 Elements:
 * background and animation
 * logo (bitmap)
@@ -14,7 +14,7 @@ Elements:
     GAME1, GAME2, GAME3 and EXIT
   Clicking the EXIT button navigates somewhere, clicking any of the GAME buttons takes the user to the game area.
 
-##3: Game
+#3: Game
 A simple side scroller shoot’em up game with space ships. The goal is to destroy enemy ships and survive without collision as long as you can.
 
 Rules:
