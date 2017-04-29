@@ -1,62 +1,65 @@
-declare const SHORT_EXPLOSION = 600;
-declare const LONG_EXPLOSION = 2500;
-
 class GameController extends Controller {
-    protected selectedOption = 'menu';
+    private _backgroundCollection: BackgroundCollection = new BackgroundCollection(this._stage);
+    private _bulletCollection: BulletCollection = new BulletCollection(this._stage);
+    private _enemyCollection: EnemyCollection = new EnemyCollection(this._stage);
+    private _player: Player = new Player();
 
-    private TOLERANCE = 30;
-    private cursor = 'none';
-    private backgroundCollection = new BackgroundCollection(this.stage);
-    private bulletCollection = new BulletCollection(this.stage);
-    private enemyCollection = new EnemyCollection(this.stage);
-    private player = new Player();
-    private timer;
-
-    constructor(stage, renderer) {
+    public constructor(stage: PIXI.Container, renderer) {
         super(stage);
-        this.stage.interactive = true;
-        this.stage.addChild(this.player);
+        this._stage.interactive = true;
+        this._stage.addChild(this._player);
+        this._stage.cursor = 'none';
 
-        this.timer = setInterval(this.enemyCollection.add.bind(this.enemyCollection), 2000);
+        this._selectedOption = 'menu';
+        this._timer = setInterval(this._enemyCollection.add.bind(this._enemyCollection), 2000);
 
-        // TODO: create custom stage??
-        this.stage.on('pointertap', function () {
+        // stage events
+        this._stage.on('pointertap', () => {
             let position = {
-                x: this.player.position.x + Math.cos(this.player.rotation) * 60,
-                y: this.player.position.y + Math.sin(this.player.rotation) * 60
+                x: this._player.position.x + Math.cos(this._player.rotation) * 60,
+                y: this._player.position.y + Math.sin(this._player.rotation) * 60
             };
-            this.bulletCollection.add(position);
-        }.bind(this));
+            this._bulletCollection.add(position);
+        });
 
-        this.stage.on('pointermove', function () {
-            this.player.move(
+        this._stage.on('pointermove', () => {
+            this._player.move(
                 renderer.plugins.interaction.mouse.global.x,
                 renderer.plugins.interaction.mouse.global.y
             );
-        }.bind(this));
+        });
     }
 
-    checkCollision() {
-        let enemies = this.enemyCollection.getItems(),
-            bullets = this.bulletCollection.getItems(),
-            eIndex = 0;
+    public update(): void {
+        if (!this._stopped) {
+            this._backgroundCollection.update();
+            this._bulletCollection.move();
+            this._enemyCollection.move();
+            this.checkCollision();
+        }
+    }
+
+    private checkCollision(): void {
+        let enemies: Array<Enemy> = this._enemyCollection.items,
+            bullets: Array<Bullet> = this._bulletCollection.items,
+            eIndex: number = 0;
 
         while (eIndex < enemies.length) {
-            let bIndex = 0;
-            var enemy = this.enemyCollection.getModelAt(eIndex);
+            let bIndex: number = 0,
+                enemy: Enemy = this._enemyCollection.getModelAt(eIndex);
             while (bIndex < bullets.length) {
-                var bullet = this.bulletCollection.getModelAt(bIndex);
+                let bullet: Bullet = this._bulletCollection.getModelAt(bIndex);
                 if (this.checkPosition(bullet, enemy)) {
-                    enemy.propagateExplosion(this.stage, SHORT_EXPLOSION);
-                    this.enemyCollection.remove(eIndex);
-                    this.bulletCollection.remove(bIndex);
+                    enemy.propagateExplosion(this._stage, SHORT_EXPLOSION);
+                    this._enemyCollection.remove(eIndex);
+                    this._bulletCollection.remove(bIndex);
                     break;
                 } else {
                     ++bIndex;
                 }
             }
-            enemy = this.enemyCollection.getModelAt(eIndex);
-            if (enemy && this.checkPosition(this.player, enemy)) {
+            enemy = this._enemyCollection.getModelAt(eIndex);
+            if (enemy && this.checkPosition(this._player, enemy)) {
                 this.beforeOver(enemy);
                 break;
             }
@@ -64,43 +67,34 @@ class GameController extends Controller {
         }
     }
 
-    update() {
-        if (!this.stopped) {
-            this.backgroundCollection.setViewportX();
-            this.bulletCollection.moveSprites();
-            this.enemyCollection.moveSprites();
-            this.checkCollision();
-        }
-    }
-
-    checkPosition(spriteA, spriteB) {
-        let rectA = spriteA.getBounds(),
-            rectB = spriteB.getBounds(),
+    private checkPosition(spriteA, spriteB): boolean {
+        let rectA: PIXI.Rectangle = spriteA.getBounds(),
+            rectB: PIXI.Rectangle = spriteB.getBounds(),
             x1 = rectA.x, x2 = rectB.x,
             y1 = rectA.y, y2 = rectB.y,
-            w1 = rectA.width - this.TOLERANCE, w2 = rectB.width - this.TOLERANCE,
-            h1 = rectA.height - this.TOLERANCE, h2 = rectB.height - this.TOLERANCE;
+            w1 = rectA.width - TOLERANCE, w2 = rectB.width - TOLERANCE,
+            h1 = rectA.height - TOLERANCE, h2 = rectB.height - TOLERANCE;
         if ((x1 + w1 > x2) && (x1 < x2 + w2) && (y1 + h1 > y2) && (y1 < y2 + h2)) {
             return true;
         }
         return false;
     }
 
-    beforeOver(enemy) {
-        this.stopped = true;
-        // this.stage.pointermove = null;
-        // this.stage.pointermove = null;
+    private beforeOver(enemy): void {
+        this._stopped = true;
+        this._stage.off('pointertap');
+        this._stage.off('pointermove');
 
-        enemy.propagateExplosion(this.stage, LONG_EXPLOSION);
-        this.player.propagateExplosion(this.stage, LONG_EXPLOSION);
+        enemy.propagateExplosion(this._stage, LONG_EXPLOSION);
+        this._player.propagateExplosion(this._stage, LONG_EXPLOSION);
 
-        let text = new DecoratedText('Game Over');
+        let text: DecoratedText = new DecoratedText('Game Over');
         text.position.set(CANVAS_X / 2, CANVAS_Y / 2);
-        this.stage.addChild(text);
+        this._stage.addChild(text);
 
-        this.enemyCollection.clear();
-        this.bulletCollection.clear();
-        this.player.destroy();
-        setTimeout(this.over.bind(this), 2000);
+        this._enemyCollection.clear();
+        this._bulletCollection.clear();
+        this._player.destroy();
+        setTimeout(() => { this.over(); }, 2000);
     }
 }

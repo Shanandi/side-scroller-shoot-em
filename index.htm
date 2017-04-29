@@ -4,8 +4,18 @@
 	<meta charset="UTF-8">
 	<title>Side Scroller Shoot'em</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script>
+		const CANVAS_X = 800;
+		const CANVAS_Y = 600;
+		const SPEED = 5;
+		const OFFSET = 100;
+		const SHORT_EXPLOSION = 600;
+		const LONG_EXPLOSION = 2500;
+		const TOLERANCE = 30;
+		const COUNT = 2000;
+	</script>
 	<script src="resources/pixi.js"></script>
-	<script src="src/Main.js"></script>
+	<script src="build/all.js"></script>
 	<script>
 		let init = () => {
 			new Main();

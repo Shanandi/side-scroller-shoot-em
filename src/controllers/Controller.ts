@@ -1,26 +1,35 @@
 class Controller {
-    protected stage: PIXI.Container;
-    protected selectedOption: string = '';
-    protected stopped: boolean = false;
-    protected background: PIXI.Sprite;
-    private isOver: boolean = false;
+    protected _stage: PIXI.Container = null;
+    protected _background = null;
+    protected _selectedOption: string = '';
+    protected _stopped: boolean = false;
+    protected _timer: number = null;
+    private _isOver: boolean = false;
 
-    constructor(stage) {
-        this.stage = stage;
+    public constructor(stage) {
+        this._stage = stage;
     }
 
-    update() { }
+    public update(): void { }
 
-    over() {
-        while (this.stage.children.length > 0) {
-            let element = this.stage.children[0];
-            this.stage.removeChildAt(0);
+    protected over(): void {
+        while (this._stage.children.length > 0) {
+            let element = this._stage.children[0];
+            this._stage.removeChildAt(0);
             element.destroy();
         }
-        this.isOver = true;
+        if (this._timer) {
+            clearTimeout(this._timer);
+        }
+        this._isOver = true;
     }
 
-    getSelectedOption = function () {
-        return this.selectedOption;
+    // public getter setters
+    public get selectedOption(): string {
+        return this._selectedOption;
+    }
+
+    public get isOver(): boolean {
+        return this._isOver;
     }
 }

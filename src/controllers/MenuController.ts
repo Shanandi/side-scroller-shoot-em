@@ -1,50 +1,46 @@
 class MenuController extends Controller {
-    protected selectedOption = 'game1';
-    protected stopped = false;
-    protected background = new FarBackground();
-    private timer;
-
     constructor(stage) {
         super(stage);
-        this.stage.addChild(this.background);
+        this._background = new FarBackground();
+        this._stage.addChild(this._background);
 
-        let title = new DecoratedText('Amazing Space Shooter');
+        this._selectedOption = 'game1';
+
+        let title: DecoratedText = new DecoratedText('Amazing Space Shooter');
         title.position.set(CANVAS_X / 2, 50);
-        this.stage.addChild(title);
+        this._stage.addChild(title);
 
-        let logo = new Player();
+        let logo: Player = new Player();
         logo.position.set(CANVAS_X / 2, 200);
-        this.stage.addChild(logo);
+        this._stage.addChild(logo);
 
-        this.timer = setInterval(function () {
+        this._timer = setInterval(() => {
             logo.rotation += Math.PI / 12;
-        }.bind(this), 100);
+        }, 100);
 
         this.addButtons();
     }
 
-    addButtons() {
-        let gameButtons = [];
-        for (let i = 1; i <= 3; ++i) {
-            let button = new Button('GAME', i);
-            gameButtons.push(button);
+    public update(): void {
+        if (!this._stopped) {
+            this._background.update();
         }
-        let exit = new Button('EXIT');
-        gameButtons.push(exit);
-        gameButtons.forEach(function (button) {
-            this.stage.addChild(button);
-            button.on('click', function () {
-                this.selectedOption = button.text.toLowerCase();
-                clearInterval(this.timer);
-                this.stopped = true;
-                this.over();
-            }.bind(this));
-        }.bind(this));
     }
 
-    update() {
-        if (!this.stopped) {
-            this.background.setViewportX();
+    private addButtons(): void {
+        let gameButtons: Array<Button> = [];
+        for (let i = 1; i <= 3; ++i) {
+            gameButtons.push(new Button('GAME', i));
         }
+        gameButtons.push(new Button('EXIT'));
+        gameButtons.forEach((button) => {
+            this._stage.addChild(button);
+            button.on('click', () => {
+                this._selectedOption = button.text.toLowerCase();
+                clearInterval(this._timer);
+                this._stopped = true;
+                this.over();
+            });
+        });
     }
 }

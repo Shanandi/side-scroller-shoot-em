@@ -1,9 +1,7 @@
-declare const COUNT = 2000;
-
 class ParticleCollection extends PIXI.particles.ParticleContainer {
-    private particles: Array<PIXI.Sprite> = [];
+    private _particles: Array<PIXI.Sprite> = [];
 
-    constructor(position, time) {
+    public constructor(position, time: number) {
         super(COUNT, {
             scale: true,
             position: true,
@@ -11,32 +9,31 @@ class ParticleCollection extends PIXI.particles.ParticleContainer {
             uvs: true,
             alpha: true
         });
-        this.position.x = position.x;
-        this.position.y = position.y;
+        this.position.set(position.x, position.y);
 
         this.setParticles();
-        setTimeout(this.clear.bind(this), time);
+        setTimeout(() => this.clear, time);
     }
 
-    setParticles() {
-        for (let i = 0; i < COUNT; ++i) {
-            var angle = Math.random() * Math.PI * 2;
-            var radius = Math.random() * 20 * 2;
+    private setParticles(): void {
+        for (let i: number = 0; i < COUNT; ++i) {
+            let angle: number = Math.random() * Math.PI * 2,
+                radius: number = Math.random() * 20 * 2;
 
-            let sprite = PIXI.Sprite.fromImage('../../resources/images/explosion.png');
+            let sprite: PIXI.Sprite = PIXI.Sprite.fromImage('../../resources/images/explosion.png');
             sprite.anchor.set(0.5);
             sprite.position.x += radius * Math.cos(angle);
             sprite.position.y += radius * Math.sin(angle);
 
             this.addChild(sprite);
-            this.particles.push(sprite);
+            this._particles.push(sprite);
         }
     }
 
-    clear() {
-        while (this.particles.length > 0) {
-            let particle = this.particles[0];
-            this.particles.splice(0, 1);
+    private clear(): void {
+        while (this._particles.length > 0) {
+            let particle: PIXI.Sprite = this._particles[0];
+            this._particles.splice(0, 1);
             particle.destroy();
         }
         this.destroy();

@@ -1,39 +1,38 @@
 class SplashController extends Controller {
-    protected selectedOption = 'menu';
-    protected stopped = true;
-    protected background = PIXI.Sprite.fromImage('../../resources/images/far.png');
-    private filter;
+    private _filter;
 
-    constructor(stage) {
+    public constructor(stage: PIXI.Container) {
         super(stage);
-        this.stage.addChild(this.background);
+        this._background = PIXI.Sprite.fromImage('../../resources/images/far.png');
+        this._stage.addChild(this._background);
 
-        let animation = new Animation();
-        this.stage.addChild(animation);
+        this._selectedOption = 'menu';
+        this._stopped = true;
 
-        animation.onComplete = function () {
+        let animation: Animation = new Animation();
+        this._stage.addChild(animation);
+
+        animation.onComplete = () => {
             let text = new DecoratedText('GeoCat Technologies');
             text.position.set(CANVAS_X / 2, CANVAS_Y / 1.4);
-            this.stage.addChild(text);
-        }.bind(this);
+            this._stage.addChild(text);
+        };
 
-        setTimeout(function () {
-            this.filter = new PIXI.filters.ColorMatrixFilter();
-            this.stage.filters = [this.filter];
-            this.stage.removeChild(animation);
-            this.stopped = false;
-        }.bind(this), 2000);
+        setTimeout(() => {
+            this._filter = new PIXI.filters.ColorMatrixFilter();
+            this._stage.filters = [this._filter];
+            this._stage.removeChild(animation);
+            this._stopped = false;
+        }, 2000);
 
-        setTimeout(function () {
-            this.over();
-        }.bind(this), 3000);
+        setTimeout(() => { this.over(); }, 3000);
     }
 
-    update() {
-        if (!this.stopped) {
-            this.filter.matrix[3] -= 0.15;
-            this.filter.matrix[7] -= 0.15;
-            this.filter.matrix[11] -= 0.15;
+    public update(): void {
+        if (!this._stopped) {
+            this._filter.matrix[3] -= 0.15;
+            this._filter.matrix[7] -= 0.15;
+            this._filter.matrix[11] -= 0.15;
         }
     };
 }

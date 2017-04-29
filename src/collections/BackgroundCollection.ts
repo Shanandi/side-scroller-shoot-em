@@ -1,17 +1,16 @@
 class BackgroundCollection {
-    private stage: PIXI.Container;
-    private far: FarBackground = new FarBackground();
-    private mid: MidBackground = new MidBackground();
-    private viewportX = 0;
+    private _stage: PIXI.Container;
+    private _far: FarBackground = new FarBackground();
+    private _mid: MidBackground = new MidBackground();
 
-    constructor(stage) {
-        this.stage = stage;
-        this.stage.addChild(this.far);
-        this.stage.addChild(this.mid);
+    public constructor(stage) {
+        this._stage = stage;
+        this._stage.addChild(this._far);
+        this._stage.addChild(this._mid);
     }
 
-    setViewportX = function () {
-        this.far.setViewportX();
-        this.mid.setViewportX();
+    public update(): void {
+        this._far.update();
+        this._mid.update();
     }
 }

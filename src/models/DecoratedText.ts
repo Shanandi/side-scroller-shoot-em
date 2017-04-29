@@ -1,5 +1,5 @@
 class DecoratedText extends PIXI.Text {
-    constructor(text, size = 42) {
+    public constructor(text: string, size: number = 42) {
         super(text, new PIXI.TextStyle({
             fontFamily: 'Arial',
             fontSize: size,

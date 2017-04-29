@@ -1,21 +1,20 @@
-const OFFSET = 100;
 class MovingObjectCollection {
-    private collection: Array<MovingObject> = [];
-    private stage: PIXI.Container;
+    private _collection: Array<MovingObject> = [];
+    private _stage: PIXI.Container;
 
-    constructor(stage) {
-        this.stage = stage;
+    public constructor(stage: PIXI.Container) {
+        this._stage = stage;
     }
 
-    add(sprite) {
-        this.collection.push(sprite);
-        this.stage.addChild(sprite);
+    public add(sprite: MovingObject): void {
+        this._collection.push(sprite);
+        this._stage.addChild(sprite);
     }
 
-    moveSprites() {
-        var index = 0;
-        while (index < this.collection.length) {
-            let sprite = this.collection[index],
+    public move() {
+        var index: number = 0;
+        while (index < this._collection.length) {
+            let sprite = this._collection[index],
                 x = sprite.position.x += Math.cos(sprite.rotation) * SPEED,
                 y = sprite.position.y += Math.sin(sprite.rotation) * SPEED;
             if (this.isWithinCanvas(x, y)) {
@@ -27,25 +26,25 @@ class MovingObjectCollection {
         }
     }
 
-    isWithinCanvas(x, y) {
+    private isWithinCanvas(x: number, y: number): boolean {
         return x > -OFFSET && x < CANVAS_X + OFFSET && y > -OFFSET && y < CANVAS_Y + OFFSET;
     }
 
-    remove(index) {
-        this.collection[index].destroy();
-        this.collection.splice(index, 1);
+    public remove(index: number): void {
+        this._collection[index].destroy();
+        this._collection.splice(index, 1);
     }
 
-    getItems() {
-        return this.collection;
+    public get items(): Array<MovingObject> {
+        return this._collection;
     }
 
-    getModelAt(index) {
-        return this.collection[index];
+    public getModelAt(index: number): MovingObject {
+        return this._collection[index];
     }
 
-    clear() {
-        while (this.collection.length > 0) {
+    public clear() {
+        while (this._collection.length > 0) {
             this.remove(0);
         }
     }
@@ -53,24 +52,24 @@ class MovingObjectCollection {
 
 // Bullet collection
 class BulletCollection extends MovingObjectCollection {
-    constructor(stage) {
+    public constructor(stage: PIXI.Container) {
         super(stage);
     }
 
-    add(position) {
-        let sprite = new Bullet(position);
+    public add(position: Object): void {
+        let sprite: Bullet = new Bullet(position);
         super.add(sprite);
     }
 }
 
 // Enemy collection
 class EnemyCollection extends MovingObjectCollection {
-    constructor(stage) {
+    public constructor(stage: PIXI.Container) {
         super(stage);
     }
 
-    add() {
-        let sprite = new Enemy();
+    public add(): void {
+        let sprite: Enemy = new Enemy();
         super.add(sprite);
     }
 }

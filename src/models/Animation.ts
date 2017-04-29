@@ -1,12 +1,11 @@
 class Animation extends PIXI.extras.AnimatedSprite {
-    constructor() {
-        super([]);
-        let textureArray = [];
-        for (let i = 0; i < 7; i++) {
-            let texture = PIXI.Texture.fromImage('../../resources/images/animation/geo' + i + '.png');
+    public constructor() {
+        let textureArray: Array<PIXI.Texture> = [];
+        for (let i: number = 0; i < 7; i++) {
+            let texture: PIXI.Texture = PIXI.Texture.fromImage('../../resources/images/animation/geo' + i + '.png');
             textureArray.push(texture);
         };
-        this.textures = textureArray.reverse();
+        super(textureArray.reverse());
         this.loop = false;
         this.anchor.set(0.5);
         this.scale.set(0.4);
